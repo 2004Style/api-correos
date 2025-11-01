@@ -1,0 +1,180 @@
+// AGREGAR ESTOS MÉTODOS AL ARCHIVO: src/auth/auth.service.ts
+// Copiar y pegar dentro de la clase AuthService después del método githubLogin()
+
+/**
+ * Autenticación con Google OAuth
+ * Si el usuario no existe, lo crea automáticamente
+ */
+async googleLogin(profile: {
+  id: string;
+  displayName: string;
+  emails?: Array<{ value: string; verified: boolean }>;
+  photos?: Array<{ value: string }>;
+}): Promise<AuthResponseDto> {
+  try {
+    const email = profile.emails?.[0]?.value;
+
+    if (!email) {
+      throw new BadRequestException('No se pudo obtener el email de Google');
+    }
+
+    this.logger.log(`Google login attempt para: ${email}`);
+
+    // Buscar usuario por email
+    let user = await DbContext.user.findUnique({
+      where: { email },
+    });
+
+    // Si el usuario existe pero no tiene auth2Id, actualizar
+    if (user && !user.auth2Id) {
+      user = await DbContext.user.update({
+        where: { id: user.id },
+        data: {
+          auth2Id: profile.id,
+          verificado: true,
+          updatedAt: new Date(),
+        },
+      });
+
+      this.logger.log(`Auth2Id agregado al usuario existente: ${email}`);
+    }
+
+    // Si el usuario no existe, crear uno nuevo
+    if (!user) {
+      this.logger.log(`Creando nuevo usuario desde Google: ${email}`);
+
+      // Generar username a partir del email
+      const username = email.split('@')[0];
+
+      user = await DbContext.user.create({
+        data: {
+          username,
+          email,
+          auth2Id: profile.id,
+          verificado: true,
+          activo: true,
+          contrasena: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          role: {
+            connect: { name: 'USER' },
+          },
+        },
+      });
+    } else {
+      // Actualizar último acceso
+      await DbContext.user.update({
+        where: { id: user.id },
+        data: { updatedAt: new Date() },
+      });
+    }
+
+    // Generar token JWT
+    const token = this.generateToken(user);
+
+    this.logger.log(`Google login exitoso para: ${email}`);
+
+    return {
+      id: user.id,
+      username: user.username,
+      email: user.email || '',
+      telefono: user.telefono,
+      access_token: token,
+      token_type: 'Bearer',
+      expires_in: 24 * 60 * 60,
+    };
+  } catch (error) {
+    this.logger.error(
+      `Error en Google login para: ${profile.displayName}`,
+      error instanceof Error ? error.message : 'Unknown error',
+    );
+
+    throw new BadRequestException('Error en autenticación Google');
+  }
+}
+
+/**
+ * Autenticación con Discord OAuth
+ * Si el usuario no existe, lo crea automáticamente
+ */
+async discordLogin(profile: {
+  id: string;
+  username: string;
+  discriminator: string;
+  email?: string;
+  avatar?: string;
+}): Promise<AuthResponseDto> {
+  try {
+    const email = profile.email || `${profile.username}@discord.com`;
+
+    this.logger.log(`Discord login attempt para: ${email}`);
+
+    // Buscar usuario por email
+    let user = await DbContext.user.findUnique({
+      where: { email },
+    });
+
+    // Si el usuario existe pero no tiene auth2Id, actualizar
+    if (user && !user.auth2Id) {
+      user = await DbContext.user.update({
+        where: { id: user.id },
+        data: {
+          auth2Id: profile.id,
+          verificado: !!profile.email, // Solo verificado si tiene email real
+          updatedAt: new Date(),
+        },
+      });
+
+      this.logger.log(`Auth2Id agregado al usuario existente: ${email}`);
+    }
+
+    // Si el usuario no existe, crear uno nuevo
+    if (!user) {
+      this.logger.log(`Creando nuevo usuario desde Discord: ${email}`);
+
+      user = await DbContext.user.create({
+        data: {
+          username: profile.username,
+          email,
+          auth2Id: profile.id,
+          verificado: !!profile.email,
+          activo: true,
+          contrasena: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          role: {
+            connect: { name: 'USER' },
+          },
+        },
+      });
+    } else {
+      // Actualizar último acceso
+      await DbContext.user.update({
+        where: { id: user.id },
+        data: { updatedAt: new Date() },
+      });
+    }
+
+    // Generar token JWT
+    const token = this.generateToken(user);
+
+    this.logger.log(`Discord login exitoso para: ${email}`);
+
+    return {
+      id: user.id,
+      username: user.username,
+      email: user.email || '',
+      telefono: user.telefono,
+      access_token: token,
+      token_type: 'Bearer',
+      expires_in: 24 * 60 * 60,
+    };
+  } catch (error) {
+    this.logger.error(
+      `Error en Discord login para: ${profile.username}`,
+      error instanceof Error ? error.message : 'Unknown error',
+    );
+
+    throw new BadRequestException('Error en autenticación Discord');
+  }
+}

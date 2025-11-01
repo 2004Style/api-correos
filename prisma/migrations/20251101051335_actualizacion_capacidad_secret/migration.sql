@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "aplicaciones" ALTER COLUMN "client_id" SET DATA TYPE VARCHAR(700),
+ALTER COLUMN "secret_key" SET DATA TYPE VARCHAR(700);

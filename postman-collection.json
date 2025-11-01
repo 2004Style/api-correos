@@ -1,0 +1,973 @@
+{
+    "info": {
+        "name": "API Correos NestJS",
+        "description": "Colección completa de endpoints - Paginación, Búsqueda y Autenticación",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:3000",
+            "type": "string"
+        },
+        {
+            "key": "token",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "client_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "secret_key",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "user_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "role_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "app_id",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "🔐 Autenticación",
+            "item": [
+                {
+                    "name": "Registrar (Ronald)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"ronald\",\n  \"email\": \"ronald@cs.dev\",\n  \"telefono\": \"+34 600 123 456\",\n  \"contrasena\": \"MiContraseña123!\",\n  \"confirmaContrasena\": \"MiContraseña123!\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/register",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "register"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Registrar (Rdev)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"rdev\",\n  \"email\": \"rdev@cs.dev\",\n  \"contrasena\": \"MiContraseña123!\",\n  \"confirmaContrasena\": \"MiContraseña123!\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/register",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "register"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Login (Ronald)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"ronald@cs.dev\",\n  \"contrasena\": \"MiContraseña123!\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "login"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Mi Perfil",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/profile",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "profile"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "👥 Usuarios",
+            "item": [
+                {
+                    "name": "Listar Usuarios (Página 1)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/user?page=1&limit=10",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "user"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Buscar Usuarios (Ronald)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/user?search=ronald&limit=10",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "user"
+                            ],
+                            "query": [
+                                {
+                                    "key": "search",
+                                    "value": "ronald"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Buscar por Email",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/user?search=@cs.dev",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "user"
+                            ],
+                            "query": [
+                                {
+                                    "key": "search",
+                                    "value": "@cs.dev"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Obtener Usuario por ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/user/{{user_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "user",
+                                "{{user_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Crear Usuario",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"style\",\n  \"email\": \"style@cs.dev\",\n  \"roleName\": \"USER\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/user",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "user"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar Usuario",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"ronald_updated@cs.dev\",\n  \"telefono\": \"+34 600 987 654\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/user/{{user_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "user",
+                                "{{user_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar Usuario",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/user/{{user_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "user",
+                                "{{user_id}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🎯 Roles",
+            "item": [
+                {
+                    "name": "Listar Todos los Roles",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/roles?page=1&limit=10",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "roles"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Buscar Rol (Admin)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/roles?search=admin",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "roles"
+                            ],
+                            "query": [
+                                {
+                                    "key": "search",
+                                    "value": "admin"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Obtener Rol por ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/roles/{{role_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "roles",
+                                "{{role_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Crear Rol (ADMIN Only)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"MODERATOR\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/roles",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "roles"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar Rol (ADMIN Only)",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"SUPER_ADMIN\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/roles/{{role_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "roles",
+                                "{{role_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar Rol (ADMIN Only)",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/roles/{{role_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "roles",
+                                "{{role_id}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📱 Aplicaciones",
+            "item": [
+                {
+                    "name": "Listar Todas las Aplicaciones",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/aplication?page=1&limit=10",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "aplication"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Buscar Aplicación por Nombre",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/aplication?search=Newsletter",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "aplication"
+                            ],
+                            "query": [
+                                {
+                                    "key": "search",
+                                    "value": "Newsletter"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Obtener Aplicación por ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/aplication/{{app_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "aplication",
+                                "{{app_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Crear Aplicación",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Newsletter App\",\n  \"userId\": \"{{user_id}}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/aplication",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "aplication"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Aplicaciones del Usuario",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/aplication/user/{{user_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "aplication",
+                                "user",
+                                "{{user_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Desactivar Aplicación",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/aplication/inactive/{{app_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "aplication",
+                                "inactive",
+                                "{{app_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Suspender Aplicación",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/aplication/suspend/{{app_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "aplication",
+                                "suspend",
+                                "{{app_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar Aplicación",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/aplication/{{app_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "aplication",
+                                "{{app_id}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📧 Correos",
+            "item": [
+                {
+                    "name": "Enviar Correo Simple a Ronald",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-Client-Id",
+                                "value": "{{client_id}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-Secret-Key",
+                                "value": "{{secret_key}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"to\": \"ronald@cs.dev\",\n  \"subject\": \"Prueba de Correo\",\n  \"text\": \"Hola Ronald, este es un correo de prueba desde la API\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/mail",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "mail"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Enviar Correo HTML",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-Client-Id",
+                                "value": "{{client_id}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-Secret-Key",
+                                "value": "{{secret_key}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"to\": \"ronald@cs.dev\",\n  \"subject\": \"¡Bienvenido a nuestra plataforma!\",\n  \"html\": \"<h1>Hola Ronald</h1><p>Bienvenido a nuestro sistema de gestión de correos.</p><p><strong>Estamos listos para ayudarte.</strong></p>\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/mail",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "mail"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Enviar a Múltiples Destinatarios",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-Client-Id",
+                                "value": "{{client_id}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-Secret-Key",
+                                "value": "{{secret_key}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"to\": [\"ronald@cs.dev\", \"rdev@cs.dev\", \"style@cs.dev\"],\n  \"cc\": \"supervisor@cs.dev\",\n  \"subject\": \"Comunicado Importante\",\n  \"html\": \"<h2>Atención a todos</h2><p>Se notifica que el sistema estará en mantenimiento el próximo sábado.</p>\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/mail",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "mail"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Enviar con Reply-To",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-Client-Id",
+                                "value": "{{client_id}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-Secret-Key",
+                                "value": "{{secret_key}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"to\": \"ronald@cs.dev\",\n  \"subject\": \"Soporte Técnico\",\n  \"html\": \"<p>Hola Ronald, ¿en qué podemos ayudarte?</p>\",\n  \"replyTo\": \"support@cs.dev\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/mail",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "mail"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Enviar con CC y BCC",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-Client-Id",
+                                "value": "{{client_id}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-Secret-Key",
+                                "value": "{{secret_key}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"to\": \"ronald@cs.dev\",\n  \"cc\": [\"rdev@cs.dev\"],\n  \"bcc\": [\"admin@cs.dev\"],\n  \"subject\": \"Reporte Confidencial\",\n  \"html\": \"<p>Información sensible solo para receptores autorizados.</p>\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/mail",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "mail"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🏠 Información",
+            "item": [
+                {
+                    "name": "Estado del Servicio",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                ""
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

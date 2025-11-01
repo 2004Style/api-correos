@@ -1,0 +1,35 @@
+// AGREGAR ESTO AL ARCHIVO: src/auth/auth.module.ts
+
+// 1. ACTUALIZAR LOS IMPORTS (en la parte superior del archivo)
+import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { UserService } from '../user/user.service';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { GitHubStrategy } from './strategies/github.strategy';
+import { GoogleStrategy } from './strategies/google.strategy';   // AGREGAR ESTO
+import { DiscordStrategy } from './strategies/discord.strategy'; // AGREGAR ESTO
+
+@Module({
+  imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'your-secret-key-change-this',
+      signOptions: { expiresIn: '24h' },
+    }),
+  ],
+  // 2. ACTUALIZAR EL ARRAY providers AGREGANDO GoogleStrategy Y DiscordStrategy
+  controllers: [AuthController],
+  providers: [
+    AuthService,
+    UserService,
+    JwtStrategy,
+    GitHubStrategy,
+    GoogleStrategy,    // AGREGAR ESTO
+    DiscordStrategy,   // AGREGAR ESTO
+  ],
+  exports: [AuthService, JwtModule],
+})
+export class AuthModule {}

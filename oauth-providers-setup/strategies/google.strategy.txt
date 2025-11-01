@@ -1,0 +1,42 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { Injectable, Logger } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { Strategy, VerifyCallback } from 'passport-google-oauth20';
+import { AuthService } from '../auth.service';
+
+@Injectable()
+export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
+  private readonly logger = new Logger(GoogleStrategy.name);
+
+  constructor(private readonly authService: AuthService) {
+    super({
+      clientID: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      callbackURL:
+        process.env.GOOGLE_CALLBACK_URL ||
+        'http://localhost:3000/auth/google/callback',
+      scope: ['profile', 'email'],
+    });
+  }
+
+  async validate(
+    accessToken: string,
+    refreshToken: string,
+    profile: any,
+    done: VerifyCallback,
+  ): Promise<void> {
+    this.logger.log(
+      `Google profile received for user: ${profile.displayName}`,
+    );
+
+    const result = await this.authService.googleLogin({
+      id: profile.id,
+      displayName: profile.displayName,
+      emails: profile.emails,
+      photos: profile.photos,
+    });
+
+    done(null, result);
+  }
+}

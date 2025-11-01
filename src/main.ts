@@ -4,6 +4,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { initializedSeed } from './seed/initialized.seed';
 
 async function bootstrap(): Promise<void> {
   const logger = new Logger('Bootstrap');
@@ -28,6 +29,8 @@ async function bootstrap(): Promise<void> {
       errorHttpStatusCode: 400,
     }),
   );
+
+  await initializedSeed();
 
   const port = process.env.PORT ?? 3000;
   await app.listen(port);
